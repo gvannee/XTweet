@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node app.ts",
-    "serve": "nodemon app.ts"
+    "serve": "nodemon app.ts",
+    "build": "node app.js build"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

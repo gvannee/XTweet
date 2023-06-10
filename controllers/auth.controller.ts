@@ -3,6 +3,7 @@ import { RegisterValidation } from '../validation/register.validation';
 import User from '../models/User';
 import bcryptjs from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
+import { LoginValidation } from '../validation/login.validation';
 
 
 export const Register = async (req: Request, res: Response) => {
@@ -46,9 +47,13 @@ export const Register = async (req: Request, res: Response) => {
 }
 
 export const Login = async (req: Request, res: Response) => {
+    const {error} = LoginValidation.validate(req.body);
     let password = "";
     let id = ""
     console.log(req.body);
+    if(error) {
+        return res.status(404).send(error.details);
+    }
     await User.findOne({ email: req.body.email})
         .then((docs) => {
             // console.log("Result :", docs);
@@ -69,13 +74,12 @@ export const Login = async (req: Request, res: Response) => {
         return res.status(400).send("Password is incorrect")
     }
 
-    const payload = {
+    //TODO: Set private key for token
+    const token = sign({
         id: id,
         email: req.body.email,
         password: req.body.password,
-    }
-
-    const token = sign(payload, "tweet")
+    }, "tweet")
 
 
     //TODO: save token in cookie
