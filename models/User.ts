@@ -15,13 +15,13 @@ const UserSchema = new mongoose.Schema(
         email: {
             type: String,
             required: true,
-            
+
         },
 
         phone: {
             type: String,
             required: true,
-           
+
         },
 
         username: {
@@ -42,9 +42,21 @@ const UserSchema = new mongoose.Schema(
         password: {
             type: String,
             required: true,
-        }
+        },
+
+        profileImg: {
+            type: String,
+            default: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fthxombang.edu.vn%2Favatar-mac-dinh-facebook%2F&psig=AOvVaw0KdXBlIdGlNw7atk3Bmdlu&ust=1686735961468000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCOirvaD7v_8CFQAAAAAdAAAAABAE",
+
+        },
+
+        coverImg: {
+            type: String,
+            default: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fthxombang.edu.vn%2Favatar-mac-dinh-facebook%2F&psig=AOvVaw0KdXBlIdGlNw7atk3Bmdlu&ust=1686735961468000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCOirvaD7v_8CFQAAAAAdAAAAABAE",
+        },
+
     }
 )
 
-const User = mongoose.model('User',UserSchema);
+const User = mongoose.model('User', UserSchema);
 export default User;
