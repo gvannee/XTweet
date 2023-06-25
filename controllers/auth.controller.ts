@@ -16,8 +16,6 @@ export const Register = async (req: Request, res: Response) => {
         lastName: body.lastName,
         email: body.email,
         phone: body.phone,
-        username: body.username,
-        gender: body.gender,
         dob: body.dob,
         password: await bcryptjs.hash(body.password, 10)
     });
@@ -27,11 +25,15 @@ export const Register = async (req: Request, res: Response) => {
     }
 
     if (await User.findOne({ phone: body.phone })) {
-        return res.status(400).send("This phone number is already used by another user");
+        return res.status(400).send({
+            message: "This phone number is already used by another user"
+        });
     }
 
     if (await User.findOne({ email: body.email })) {
-        return res.status(400).send("This email is already used by another user");
+        return res.status(400).send({
+            message: "This email is already used by another user"
+        });
     }
 
     try {
@@ -39,9 +41,13 @@ export const Register = async (req: Request, res: Response) => {
         console.log(req.body);
 
     } catch (err) {
-        return res.status(404).send("something went wrong");
+        return res.status(404).send({
+            message: "something went wrong"
+        });
     }
-    res.status(201).send(user);
+    res.status(201).send({
+        message: "Success"
+    });
 
 
 
@@ -51,6 +57,7 @@ export const Login = async (req: Request, res: Response) => {
     const { error } = LoginValidation.validate(req.body);
     let password = "";
     let id = ""
+    let user : any
     console.log(req.body);
     if (error) {
         return res.status(404).send(error.details);
@@ -63,16 +70,21 @@ export const Login = async (req: Request, res: Response) => {
                 password = docs.password;
                 id = docs._id.toString();
                 console.log(password);
+                user = docs
             }
 
         })
         .catch((err) => {
             console.log(err);
-            return res.status(404).send("User not found")
+            return res.status(404).send({
+                message: "User not found"
+            })
         });
 
     if (!await bcryptjs.compare(req.body.password, password)) {
-        return res.status(400).send("Password is incorrect")
+        return res.status(400).send({
+            message: "Password is incorrect"
+        })
     }
 
     //TODO: Set private key for token
@@ -93,7 +105,8 @@ export const Login = async (req: Request, res: Response) => {
     })
 
     const message = {
-        type: "Successful",
+        message: "Successful",
+        
         id: id,
     }
 

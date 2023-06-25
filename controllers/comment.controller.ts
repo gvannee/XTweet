@@ -1,6 +1,5 @@
 import { Request, Response} from 'express'
 import Comment from '../models/Comments';
-import Conversation from '../models/Conversation';
 import moment from 'moment';
 
 export const GetComments = (req: Request, res: Response) => {

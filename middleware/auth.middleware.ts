@@ -51,10 +51,10 @@ export const AuthMiddleware = async (req: Request, res: Response, next: Function
                     user.lastName = docs.lastName;
                     user.email = docs.email;
                     user.phone = docs.phone;
-                    user.username = docs.username;
+                    if(docs.username) user.username = docs.username;
                     user.password = docs.password;
                     user.dob = docs.dob;
-                    user.gender = docs.gender;
+                    if(docs.gender) user.gender = docs.gender;
                     user.profileImg = docs.profileImg;
                     user.coverImg = docs.coverImg;
                 }

@@ -26,12 +26,10 @@ const UserSchema = new mongoose.Schema(
 
         username: {
             type: String,
-            required: true,
         },
 
         gender: {
             type: String,
-            required: true,
         },
 
         dob: {
@@ -46,13 +44,13 @@ const UserSchema = new mongoose.Schema(
 
         profileImg: {
             type: String,
-            default: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fthxombang.edu.vn%2Favatar-mac-dinh-facebook%2F&psig=AOvVaw0KdXBlIdGlNw7atk3Bmdlu&ust=1686735961468000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCOirvaD7v_8CFQAAAAAdAAAAABAE",
+            default: "https://haycafe.vn/wp-content/uploads/2022/02/Hinh-anh-avatar-facebook-doc-nen-ombre.jpg",
 
         },
 
         coverImg: {
             type: String,
-            default: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fthxombang.edu.vn%2Favatar-mac-dinh-facebook%2F&psig=AOvVaw0KdXBlIdGlNw7atk3Bmdlu&ust=1686735961468000&source=images&cd=vfe&ved=0CBEQjRxqFwoTCOirvaD7v_8CFQAAAAAdAAAAABAE",
+            default: "https://www.treehugger.com/thmb/CuTzoTtXv9ThPkwdSxHREceRFU8=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/scenic-view-of-silhouette-mountains-against-sky-during-sunset-1325186919-166516c836d644dd953f34a3b7fe9c7f.jpg",
         },
 
     }
