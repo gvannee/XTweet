@@ -1,7 +1,7 @@
-import { Request, Response} from 'express'
-import Relationship from '../models/Relationships'
 
-export const Follow = (req: Request, res: Response) => {
+import Relationship from '../models/Relationships.js'
+
+export const Follow = (req, res) => {
     const user = {
         "followerUserId": req.body.followerUserId,
         "followedUserId": req.body.followedUserId
@@ -20,7 +20,7 @@ export const Follow = (req: Request, res: Response) => {
     res.status(200).send(user)
 }
 
-export const GetFollow = (req: Request, res: Response) => {
+export const GetFollow = (req, res) => {
     const followerId = req.query.followerId;
     const user = req.body.user
     Relationship.find({followedUserId: user.id, followerUserId: followerId})
@@ -38,7 +38,7 @@ export const GetFollow = (req: Request, res: Response) => {
     })
 }
 
-export const Unfollow = (req: Request, res: Response) => {
+export const Unfollow = (req, res) => {
     const id = req.query.followerId;
     const user = req.body.user
     Relationship.findOneAndDelete({followedUserId: user.id, followerUserId: id})

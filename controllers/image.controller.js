@@ -1,9 +1,9 @@
-import { Request, Response } from 'express';
+
 import { extname } from 'path';
 import multer from 'multer';
-import User from '../models/User';
 
-export const Upload = async (req: Request, res: Response) => {
+
+export const Upload = async (req, res) => {
     const user = req.body.user;
     let link
 
@@ -15,7 +15,7 @@ export const Upload = async (req: Request, res: Response) => {
             return callback(null, `${randomName}${extname(file.originalname)}`)
         },
     })
-    const env : string = (process.env.API_KEY as string);
+    const env  = (process.env.API_KEY );
 
     const upload = multer ({storage}).single("image")
    

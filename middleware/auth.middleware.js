@@ -1,23 +1,21 @@
-import { Request, Response, response } from 'express'
+import User from '../models/User.js';
 
-import User from '../models/User';
-
-import { sign, verify } from 'jsonwebtoken';
-import { ObjectType } from 'typescript';
+import pkg from 'jsonwebtoken';
 
 
-export const AuthMiddleware = async (req: Request, res: Response, next: Function) => {
 
+export const AuthMiddleware = async (req, res, next) => {
+    const { sign, verify } = pkg;
     try {
         
         const jwt = req.cookies["jwt"];
 
-        const env: string = (process.env.SECRETE_KEY as string);
+        const env = (process.env.SECRETE_KEY );
 
         console.log(env);
         
 
-        const token: any = verify(jwt, env);
+        const token = verify(jwt, env);
 
 
         if (!token) {

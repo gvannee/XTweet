@@ -1,7 +1,7 @@
-import { Request, Response } from 'express';
-import User from '../models/User';
 
-export const Users = async (req: Request, res: Response) => {
+import User from '../models/User.js';
+
+export const Users = async (req, res) => {
     let users = [{}]
 
     await User.find()
@@ -35,7 +35,7 @@ export const Users = async (req: Request, res: Response) => {
     // console.log(typeof users);
 
     const list = users.map(user => {
-        const { password, ...data }: any = user;
+        const { password, ...data } = user;
         return data
     })
 
@@ -43,7 +43,7 @@ export const Users = async (req: Request, res: Response) => {
 
 }
 
-export const FindUsersById = (req: Request, res: Response) => {
+export const FindUsersById = (req, res) => {
     const id = req.query.id
     const user = {
         firstName: "",

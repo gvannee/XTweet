@@ -1,14 +1,19 @@
-import express from 'express';
-import { Request, Response } from 'express';
-import { routes } from './router';
-import mongoose from 'mongoose';
+
+
+import express, { json } from 'express';
+import routes from './router.js';
 import cors from 'cors';
-import cookieParser from 'cookie-parser';
-import multer from 'multer';
+
+import cookieParser from 'cookie-parser'; 
+import multer, { diskStorage } from 'multer';
 
 
+import pkg from 'mongoose';
+const { connect, connection } = pkg;
 
-require('dotenv').config({ path: 'local.env' })
+import dotenv from 'dotenv';
+
+dotenv.config({ path: 'local.env' })
 
 
 //mongodb://localhost:27017
@@ -16,16 +21,16 @@ const app = express();
 //middleware parse json
 
 //TODO: connect to mongodb server
-mongoose.connect(
+connect(
   `mongodb+srv://admin:admin@xtweet.cim5loe.mongodb.net/XTweet`,
 );
 
-const db = mongoose.connection;
+const db = connection;
 db.on("error", console.error.bind(console, "connection error: "));
 db.once("open", function () {
   console.log("Connected successfully");
 });
-app.use(express.json());
+app.use(json());
 
 //TODO: open CORS 
 app.use(cors({
@@ -39,7 +44,7 @@ app.use(cookieParser());
 //route 
 routes(app);
 
-const storage = multer.diskStorage({
+const storage = diskStorage({
   destination: function (req, file, cb) {
     cb(null, '/my-uploads')
   },
@@ -51,7 +56,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage })
 
-app.post('/upload', upload.single("file"), (req: Request, res: Response) => {
+app.post('/upload', upload.single("file"), (req, res) => {
   const file = req.file
   res.status(200).send(file?.filename);
 })
@@ -59,11 +64,5 @@ app.post('/upload', upload.single("file"), (req: Request, res: Response) => {
 //listen on port 3000
 const server = app.listen(8080, () => {
   console.log("Listening on port 3000");
-})
-
-let io = require('socket.io')(server)
-io.once('connection', (socket: any) => {
-  console.log(`New connection ${socket.id}`);
-  
 })
 

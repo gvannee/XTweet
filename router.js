@@ -1,16 +1,15 @@
-import { Router } from "express";
-import { Login, Register, AuthenticationUser, Logout, UpdateInfo, UpdatePassword } from "./controllers/auth.controller";
-import { AuthMiddleware } from "./middleware/auth.middleware";
-import { FindUsersById, Users } from "./controllers/user.controller";
-import { Upload } from "./controllers/image.controller";
+import { Login, Register, AuthenticationUser, Logout, UpdateInfo, UpdatePassword } from "./controllers/auth.controller.js";
+import { AuthMiddleware } from "./middleware/auth.middleware.js";
+import { FindUsersById, Users } from "./controllers/user.controller.js";
+import { Upload } from "./controllers/image.controller.js";
 import express from 'express';
-import { AddPost, DeletePost, GetPosts, GetPostsNewsfeed } from "./controllers/post.controller";
-import { Follow, GetFollow, Unfollow } from "./controllers/relationship.controller";
-import { AddComment, GetComments } from "./controllers/comment.controller";
-import { AddLike, GetLikes, Unlike } from "./controllers/like.controller";
+import { AddPost, DeletePost, GetPosts, GetPostsNewsfeed } from "./controllers/post.controller.js";
+import { Follow, GetFollow, Unfollow } from "./controllers/relationship.controller.js";
+import { AddComment, GetComments } from "./controllers/comment.controller.js";
+import { AddLike, GetLikes, Unlike } from "./controllers/like.controller.js";
 
 
-export const routes = (router: Router) => {
+const routes = (router) => {
     // * Authentication controller routes
     //TODO: create new account
     router.post('/register', Register);
@@ -42,10 +41,10 @@ export const routes = (router: Router) => {
 
     //* Image controller routes
     router.post('/image/upload', AuthMiddleware, Upload);
-    router.use('/image/uploads', express.static('./uploads'));
+    router.use('/image/uploads', express.static('./uploads')); 
 
     //* Post controller routes
-    router.get('/user/posts', AuthMiddleware, GetPosts);
+    router.get('/user/:id', AuthMiddleware, GetPosts);
     
 
     //TODO: get posts for the newsfeed
@@ -71,3 +70,5 @@ export const routes = (router: Router) => {
     router.post('/likes/add', AuthMiddleware, AddLike);
     router.delete('/likes/delete', AuthMiddleware, Unlike);
 }
+
+export default routes;

@@ -1,8 +1,8 @@
-import { Request, Response} from 'express'
-import Comment from '../models/Comments';
+
+import Comment from '../models/Comments.js';
 import moment from 'moment';
 
-export const GetComments = (req: Request, res: Response) => {
+export const GetComments = (req, res) => {
     const postId = req.query.postId;
     Comment.find({ 
         postId: postId
@@ -16,7 +16,7 @@ export const GetComments = (req: Request, res: Response) => {
    
 }
 
-export const AddComment = (req: Request, res: Response) => {
+export const AddComment = (req, res) => {
     const postId = req.query.postId;
  
     

@@ -1,14 +1,15 @@
-import { Request, Response, response } from 'express'
-import { RegisterValidation } from '../validation/register.validation';
-import User from '../models/User';
+
+import { RegisterValidation } from '../validation/register.validation.js';
+import User from '../models/User.js';
 import bcryptjs from 'bcryptjs';
-import { sign, verify } from 'jsonwebtoken';
-import { LoginValidation } from '../validation/login.validation';
+import pkg from 'jsonwebtoken';
+import { LoginValidation } from '../validation/login.validation.js';
 
 
 
-export const Register = async (req: Request, res: Response) => {
+export const Register = async (req, res) => {
     const body = req.body;
+    
 
     const { error } = RegisterValidation.validate(body);
     const user = new User({
@@ -53,15 +54,17 @@ export const Register = async (req: Request, res: Response) => {
 
 }
 
-export const Login = async (req: Request, res: Response) => {
+export const Login = async (req, res) => {
     const { error } = LoginValidation.validate(req.body);
     let password = "";
     let id = ""
-    let user : any
+    let user;
     console.log(req.body);
     if (error) {
         return res.status(404).send(error.details);
     }
+
+    const { sign, verify } = pkg;
     await User.findOne({ email: req.body.email })
         .then((docs) => {
             // console.log("Result :", docs);
@@ -88,9 +91,9 @@ export const Login = async (req: Request, res: Response) => {
     }
 
     //TODO: Set private key for token
-    const env: string = (process.env.SECRETE_KEY as string);
+    const env= (process.env.SECRETE_KEY );
 
-    console.log(env);
+    console.log(env); 
     const token = sign({
         id: id,
         email: req.body.email,
@@ -114,18 +117,18 @@ export const Login = async (req: Request, res: Response) => {
 
 }
 
-export const AuthenticationUser = async (req: Request, res: Response) => {
+export const AuthenticationUser = async (req, res) => {
     res.status(200).send(req.body.user)
 }
 
-export const Logout = (req: Request, res: Response) => {
+export const Logout = (req, res) => {
     res.cookie("jwt", '', { maxAge: 0 });
     return res.send({
         "Message": "Success"
     })
 }
 
-export const UpdateInfo = async (req: Request, res: Response) => {
+export const UpdateInfo = async (req, res) => {
     const user = req.body.user;
     await User.updateOne(user._id, req.body)
 
@@ -151,8 +154,9 @@ export const UpdateInfo = async (req: Request, res: Response) => {
     })
 }
 
-export const UpdatePassword = async (req: Request, res: Response) => {
+export const UpdatePassword = async (req, res) => {
     const user = req.body.user;
+    const { sign, verify } = pkg;
 
     if (req.body.password != req.body.confirmPassword) {
         return res.status(403).send({

@@ -1,6 +1,6 @@
-import Likes from '../models/Likes'
-import { Request, Response } from "express"
-export const GetLikes = (req: Request, res: Response) => {
+import Likes from '../models/Likes.js'
+
+export const GetLikes = (req, res) => {
     const postId = req.query.postId;
     Likes.find({}, [postId])
         .then(data => {
@@ -14,7 +14,7 @@ export const GetLikes = (req: Request, res: Response) => {
         })
 }
 
-export const AddLike = (req: Request, res: Response) => {
+export const AddLike = (req, res) => {
     const postId = req.query.postId;
 
     const like = new Likes({
@@ -30,7 +30,7 @@ export const AddLike = (req: Request, res: Response) => {
     }
 }
 
-export const Unlike = (req: Request, res: Response) => {
+export const Unlike = (req, res) => {
     const postId = req.query.postId;
 
     Likes.findOneAndDelete({
