@@ -59,7 +59,7 @@ export const GetPosts = async (req, res) => {
             
 
         }
-        console.log(posts);
+        // console.log(posts);
 
         
         res.status(200).send(posts)
@@ -72,12 +72,12 @@ export const GetPostsNewsfeed = async (req, res) => {
     const user = req.body.user
     let followed = [];
     followed.push(new ObjectId(user.id))
-    await Relationship.find({ followedUserId: user.id })
+    await Relationship.find({ followerUserId: user.id })
         .then(data => {
             console.log(typeof data);
             if (data) {
                 for (let i = 0; i < data.length; i++) {
-                    followed.push(data[i].followerUserId)
+                    followed.push(data[i].followedUserId)
                 }
 
 
@@ -128,7 +128,7 @@ export const GetPostsNewsfeed = async (req, res) => {
                 }
             }
 
-            console.log(userInfo);
+            // console.log(userInfo);
 
             
         })

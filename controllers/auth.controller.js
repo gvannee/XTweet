@@ -9,7 +9,7 @@ import { LoginValidation } from '../validation/login.validation.js';
 
 export const Register = async (req, res) => {
     const body = req.body;
-    
+
 
     const { error } = RegisterValidation.validate(body);
     const user = new User({
@@ -91,9 +91,9 @@ export const Login = async (req, res) => {
     }
 
     //TODO: Set private key for token
-    const env= (process.env.SECRETE_KEY );
+    const env = (process.env.SECRETE_KEY);
 
-    console.log(env); 
+    console.log(env);
     const token = sign({
         id: id,
         email: req.body.email,
@@ -109,7 +109,7 @@ export const Login = async (req, res) => {
 
     const message = {
         message: "Successful",
-        
+
         id: id,
     }
 
@@ -129,29 +129,24 @@ export const Logout = (req, res) => {
 }
 
 export const UpdateInfo = async (req, res) => {
-    const user = req.body.user;
-    await User.updateOne(user._id, req.body)
-
-    let info = {
-
-    }
-    await User.findOne(user._id)
-        .then((docs) => {
-            console.log(docs);
-            if (docs) {
-                info = docs;
-            }
+    const user = req.params.id;
+    await User.updateMany({_id: user}, req.body.updateInfo)
+        .then((data) => {
+            console.log(req.body.updateInfo);
+            res.status(200).send(
+                data
+            )
         })
+
         .catch((err) => {
-            console.log(err);
-            res.status(404).send({
-                "message": "Something went wrong"
+            res.status(500).send({
+                message: err.message
             })
         })
 
-    res.status(200).send({
-        "message": "Successfully updated"
-    })
+
+
+
 }
 
 export const UpdatePassword = async (req, res) => {
@@ -165,9 +160,9 @@ export const UpdatePassword = async (req, res) => {
     }
 
     await User.updateOne(user._id, {
-            password: await bcryptjs.hash(req.body.password, 10)
-        })
-    
+        password: await bcryptjs.hash(req.body.password, 10)
+    })
+
 
     res.status(200).send({
         "message": "Successfully changed password"

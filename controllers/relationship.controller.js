@@ -3,8 +3,8 @@ import Relationship from '../models/Relationships.js'
 
 export const Follow = (req, res) => {
     const user = {
-        "followerUserId": req.body.followerUserId,
-        "followedUserId": req.body.followedUserId
+        "followerUserId": req.body.user.id,
+        "followedUserId": req.params.id
     }
 
     const follower = new Relationship(user)
@@ -14,44 +14,87 @@ export const Follow = (req, res) => {
         console.log(req.body);
 
     } catch (err) {
-        return res.status(404).send("something went wrong");
+        return res.status(404).send({
+            error: "something went wrong"
+        });
     }
     
     res.status(200).send(user)
 }
 
-export const GetFollow = (req, res) => {
-    const followerId = req.query.followerId;
-    const user = req.body.user
-    Relationship.find({followedUserId: user.id, followerUserId: followerId})
+export const GetFollower = (req, res) => {
+    
+    const user = req.body.user;
+    const follower = []
+    Relationship.find({followerUserId: user.id})
     .then((data) => {
-        console.log(data);
-        res.status(200).send({
-            "message": "You have followed this user"
-        })
+        if(data) {
+            console.log(data);
+            for (let i = 0; i < data.length; i++) {
+                follower.push(data[i].followedUserId)
+            }
+            
+        }
+        res.status(200).send(follower)
+        
         
     })
     .catch((err) => {
         res.status(500).send({
+            "message": "Something went wrong"
+        })
+    })
+
+    
+
+}
+
+export const GetFollowed = (req, res) => {
+    
+    const user = req.params.id;
+    const follower = []
+    Relationship.find({followedUserId: user})
+    .then((data) => {
+        if(data) {
+            console.log(data);
+            for (let i = 0; i < data.length; i++) {
+                follower.push(data[i].followerUserId)
+            }
+            
+        }
+        res.status(200).send(follower)
+        
+        
+    })
+    .catch((err) => {
+        res.status(500).send({
+            "message": "Something went wrong"
+        })
+    })
+
+    
+
+}
+
+export const Unfollow = (req, res) => {
+    const id = req.params.id;
+    const user = req.body.user
+    Relationship.findOneAndDelete({followerUserId: user.id, followedUserId: id})
+    .then((data) => {
+        console.log(data);
+        res.status(200).send({
+            "message": "Unnfollowed"
+        })
+        
+    })
+    .catch((err) => {
+        res.status(500).send({ 
             "message": "Something went wrong"
         })
     })
 }
 
-export const Unfollow = (req, res) => {
-    const id = req.query.followerId;
+export const NewUser = (req, res) => {
+    const id = req.params.id;
     const user = req.body.user
-    Relationship.findOneAndDelete({followedUserId: user.id, followerUserId: id})
-    .then((data) => {
-        console.log(data);
-        res.status(200).send({
-            "message": "You have unfollowed this user"
-        })
-        
-    })
-    .catch((err) => {
-        res.status(500).send({
-            "message": "Something went wrong"
-        })
-    })
 }

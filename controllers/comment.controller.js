@@ -1,18 +1,62 @@
 
 import Comment from '../models/Comments.js';
 import moment from 'moment';
+import User from '../models/User.js';
 
-export const GetComments = (req, res) => {
+export const GetComments = async (req, res) => {
     const postId = req.query.postId;
-    Comment.find({ 
+
+    let comments = [];
+    const userId = [];
+    await Comment.find({ 
         postId: postId
     })
     .then(data => {
-        res.status(200).send(data)
+        
+
+        if(data) {
+            for (let i = 0; i < data.length; i++) {
+                comments.push({
+                    comments: data[i],
+                    user: {}
+                })
+
+                userId.push(data[i].comUserId)
+            }
+        }
     })
     .catch(err => {
         return res.status(500).send("Cant find comments")
     })
+
+    const userInfo = [];
+
+    await User.find({_id : { $in: userId }}) 
+    .then(docs => {
+        if (docs) {
+            for (let i = 0; i < docs.length; i++) {
+                userInfo.push(docs[i]);
+            }
+        }
+    })
+
+    .catch(err => {
+        console.log(err);
+    })
+
+    for (let i = 0; i < comments.length; i++) {
+        for (let j = 0; j < userInfo.length; j++) {
+            if (comments[i].comments.comUserId == userInfo[j]._id.toString() ) {
+                comments[i].user = userInfo[j]
+            }
+
+            
+        }
+        // console.log(posts[i].post.userId);
+        
+    }
+
+    res.status(200).send(comments)
    
 }
 

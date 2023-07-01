@@ -2,25 +2,28 @@
 import User from '../models/User.js';
 
 export const Users = async (req, res) => {
-    let users = [{}]
-
+    let users = []
+    const id = req.body.user.id
     await User.find()
         .then(docs => {
             if (docs) {
                 for (let i = 0; i < docs.length; i++) {
-                    users.push({
-                        id: docs[i]._id,
-                        firstName: docs[i].firstName,
-                        lastName: docs[i].lastName,
-                        email: docs[i].email,
-                        phone: docs[i].phone,
-                        username: docs[i].username,
-                        password: docs[i].password,
-                        dob: docs[i].dob,
-                        gender: docs[i].gender,
-                        profileImg: docs[i].profileImg,
-                        coverImg: docs[i].coverImg
-                    })
+                    if (docs[i]._id != id) {
+                        users.push({
+                            id: docs[i]._id,
+                            firstName: docs[i].firstName,
+                            lastName: docs[i].lastName,
+                            email: docs[i].email,
+                            phone: docs[i].phone,
+                            username: docs[i].username,
+                            password: docs[i].password,
+                            dob: docs[i].dob,
+                            gender: docs[i].gender,
+                            profileImg: docs[i].profileImg,
+                            coverImg: docs[i].coverImg
+                        })
+                    }
+                    
                 }
             }
 

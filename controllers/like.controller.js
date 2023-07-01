@@ -1,20 +1,30 @@
 import Likes from '../models/Likes.js'
 
-export const GetLikes = (req, res) => {
+export const GetLikes = async (req, res) => {
     const postId = req.query.postId;
-    Likes.find({}, [postId])
+    const userId = [];
+    await Likes.find({ likePostId: postId })
         .then(data => {
+
+            if (data) {
+                for (let i = 0; i < data.length; i++) {
+                    userId.push(data[i].likeUserId);
+                }
+            }
             console.log(data);
-            res.status(200).send(data);
+
 
         })
         .catch(err => {
-            console.log(err);
+            console.log(err); 
 
-        })
+        }
+        )
+
+    res.status(200).send(userId);
 }
 
-export const AddLike = (req, res) => {
+export const AddLike = async (req, res) => {
     const postId = req.query.postId;
 
     const like = new Likes({
@@ -23,17 +33,17 @@ export const AddLike = (req, res) => {
     })
 
     try {
-        like.save();
+        await like.save();
         res.status(200).send("Liked");
     } catch (err) {
         res.status(500).send("Cant like")
     }
 }
 
-export const Unlike = (req, res) => {
+export const Unlike = async (req, res) => {
     const postId = req.query.postId;
 
-    Likes.findOneAndDelete({
+    await Likes.findOneAndDelete({
         likeUserId: req.body.user.id,
         likePostId: postId
     })

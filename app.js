@@ -46,7 +46,7 @@ routes(app);
 
 const storage = diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '/my-uploads')
+    cb(null, '../frontend/public/uploads')
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
@@ -62,7 +62,7 @@ app.post('/upload', upload.single("file"), (req, res) => {
 })
 
 //listen on port 3000
-const server = app.listen(8080, () => {
+ app.listen(8080, () => {
   console.log("Listening on port 3000");
 })
 

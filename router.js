@@ -1,10 +1,9 @@
 import { Login, Register, AuthenticationUser, Logout, UpdateInfo, UpdatePassword } from "./controllers/auth.controller.js";
 import { AuthMiddleware } from "./middleware/auth.middleware.js";
 import { FindUsersById, Users } from "./controllers/user.controller.js";
-import { Upload } from "./controllers/image.controller.js";
-import express from 'express';
+
 import { AddPost, DeletePost, GetPosts, GetPostsNewsfeed } from "./controllers/post.controller.js";
-import { Follow, GetFollow, Unfollow } from "./controllers/relationship.controller.js";
+import { Follow,  GetFollowed, GetFollower, Unfollow } from "./controllers/relationship.controller.js";
 import { AddComment, GetComments } from "./controllers/comment.controller.js";
 import { AddLike, GetLikes, Unlike } from "./controllers/like.controller.js";
 
@@ -26,7 +25,7 @@ const routes = (router) => {
 
     //* Users controller routes
     //TODO: Update user information
-    router.put('/user/info', AuthMiddleware, UpdateInfo);
+    router.put('/user/info/:id', AuthMiddleware, UpdateInfo);
 
     //TODO: Change password
     router.put('/user/password', AuthMiddleware, UpdatePassword);
@@ -40,8 +39,8 @@ const routes = (router) => {
 
 
     //* Image controller routes
-    router.post('/image/upload', AuthMiddleware, Upload);
-    router.use('/image/uploads', express.static('./uploads')); 
+    // router.post('/upload', AuthMiddleware, Upload);
+    // router.use('/uploads', express.static('./uploads')); 
 
     //* Post controller routes
     router.get('/user/:id', AuthMiddleware, GetPosts);
@@ -54,9 +53,10 @@ const routes = (router) => {
 
 
     //* Relationship controller routes
-    router.get('/getFollow', AuthMiddleware, GetFollow);
-    router.post('/follow', AuthMiddleware, Follow);
-    router.delete('/unfollow', AuthMiddleware, Unfollow)
+    router.get('/getFollow', AuthMiddleware, GetFollower);
+    router.get('/getFollowed/:id', AuthMiddleware, GetFollowed); 
+    router.post('/follow/:id', AuthMiddleware, Follow);
+    router.delete('/unfollow/:id', AuthMiddleware, Unfollow)
 
 
     //* Comments controller routes
@@ -65,9 +65,9 @@ const routes = (router) => {
     router.post('/comments/add', AuthMiddleware, AddComment);
 
 
-    //* Likes controller routes
+    //* Likes controller routes 
     router.get('/likes', AuthMiddleware, GetLikes);
-    router.post('/likes/add', AuthMiddleware, AddLike);
+    router.post('/likes/add', AuthMiddleware, AddLike); 
     router.delete('/likes/delete', AuthMiddleware, Unlike);
 }
 
