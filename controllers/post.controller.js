@@ -76,7 +76,7 @@ export const GetPostsNewsfeed = async (req, res) => {
         .then(data => {
             console.log(typeof data);
             if (data) {
-                for (let i = 0; i < data.length; i++) {
+                for (let i = data.length - 1; i >= 0 ; i--) {
                     followed.push(data[i].followedUserId)
                 }
 
@@ -99,7 +99,7 @@ export const GetPostsNewsfeed = async (req, res) => {
 
             // console.log(docs);
             if (docs) {
-                for (let i = 0; i < docs.length; i++) {
+                for (let i = docs.length - 1; i >= 0 ; i--) {
                     posts.push(
                         {
                             post: docs[i],
@@ -142,8 +142,8 @@ export const GetPostsNewsfeed = async (req, res) => {
         
 
 
-    for (let i = 0; i < posts.length; i++) {
-        for (let j = 0; j < userInfo.length; j++) {
+    for (let i = posts.length - 1; i >= 0 ; i--) {
+        for (let j = userInfo.length - 1; j >= 0; j--) {
             if (posts[i].post.userId == userInfo[j]._id.toString() ) {
                 posts[i].user = userInfo[j]
             }
