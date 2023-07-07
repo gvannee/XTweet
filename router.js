@@ -3,7 +3,7 @@ import { AuthMiddleware } from "./middleware/auth.middleware.js";
 import { FindUsersById, Users } from "./controllers/user.controller.js";
 
 import { AddPost, DeletePost, GetPosts, GetPostsNewsfeed } from "./controllers/post.controller.js";
-import { Follow,  GetFollowed, GetFollower, Unfollow } from "./controllers/relationship.controller.js";
+import { Follow,  GetFollowed, GetFollower, GetRelationship, Unfollow } from "./controllers/relationship.controller.js";
 import { AddComment, GetComments } from "./controllers/comment.controller.js";
 import { AddLike, GetLikes, Unlike } from "./controllers/like.controller.js";
 
@@ -54,21 +54,22 @@ const routes = (router) => {
 
     //* Relationship controller routes
     router.get('/getFollow', AuthMiddleware, GetFollower);
+    router.get('/getRelationship', AuthMiddleware, GetRelationship);
     router.get('/getFollowed/:id', AuthMiddleware, GetFollowed); 
     router.post('/follow/:id', AuthMiddleware, Follow);
-    router.delete('/unfollow/:id', AuthMiddleware, Unfollow)
+    router.delete('/unfollow/:id', AuthMiddleware, Unfollow) 
 
 
     //* Comments controller routes
     //api for FE:  '/comments?postId='
     router.get('/comments', AuthMiddleware, GetComments);
     router.post('/comments/add', AuthMiddleware, AddComment);
-
+ 
 
     //* Likes controller routes 
     router.get('/likes', AuthMiddleware, GetLikes);
     router.post('/likes/add', AuthMiddleware, AddLike); 
     router.delete('/likes/delete', AuthMiddleware, Unlike);
 }
-
-export default routes;
+ 
+export default routes;  

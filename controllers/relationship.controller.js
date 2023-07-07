@@ -25,6 +25,35 @@ export const Follow = (req, res) => {
 export const GetFollower = (req, res) => {
     
     const user = req.body.user;
+    console.log("id"+ user);
+    const follower = []
+    Relationship.find({followerUserId: user.id})
+    .then((data) => {
+        if(data) {
+            console.log("data" + data);
+            for (let i = 0; i < data.length; i++) {
+                follower.push(data[i].followedUserId)
+            }
+             
+        }
+        res.status(200).send(follower)
+        
+        
+    })
+    .catch((err) => {
+        res.status(500).send({
+            "message": "Something went wrong"
+        })
+    })
+
+    
+
+}
+
+export const GetRelationship = (req, res) => {
+    
+    const user = req.body.user;
+    
     const follower = []
     Relationship.find({followerUserId: user.id})
     .then((data) => {
@@ -52,6 +81,7 @@ export const GetFollower = (req, res) => {
 export const GetFollowed = (req, res) => {
     
     const user = req.params.id;
+   
     const follower = []
     Relationship.find({followedUserId: user})
     .then((data) => {
